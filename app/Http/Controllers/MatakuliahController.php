@@ -76,13 +76,13 @@ class MatakuliahController extends Controller
      * @param  \App\Models\Matakuliah  $matakuliah
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($kode)
     {
         $data = DB::select('
         SELECT kode, nama, jumlah_sks
         FROM matakuliah
         WHERE kode = ?
-    ', [$id]);
+    ', [$kode]);
 
         if (!empty($data)) {
             $data = $data[0]; // Retrieve only the first row from the query result
@@ -100,36 +100,30 @@ class MatakuliahController extends Controller
      * @param  \App\Models\Matakuliah  $matakuliah
      * @return \Illuminate\Http\Response
      */
-    public function update($kode, Request $request)
+
+
+    public function update($id, Request $request)
     {
         $request->validate([
-            'kode' => 'required',
+
             'nama' => 'required',
             'jumlah_sks' => 'required',
 
         ]);
 
-        DB::beginTransaction();
+        DB::update(
+            'UPDATE matakuliah SET nama = :nama, jumlah_sks = :jumlah_sks WHERE kode = :id',
+            [
 
-        try {
-            // Update the matakuliah table
-            DB::update(
-                'UPDATE matakuliah SET kode = :kode, nama = :nama, jumlah_sks = :jumlah_sks WHERE kode = :kode',
-                [
-                    'kode' => $kode,
-                    'nama' => $request->nama,
-                    'jumlah_sks' => $request->jumlah_sks,
-                ]
-            );
+                'nama' => $request->nama,
+                'jumlah_sks' => $request->jumlah_sks,
+                'id' => $id,
+            ]
+        );
 
-
-            DB::commit(); // Commit the transaction if both updates succeed
-            return redirect()->route('matakuliah.index')->with('success', 'Matakuliah data has been updated');
-        } catch (\Exception $e) {
-            DB::rollback(); // Rollback if an error occurs
-            return redirect()->back()->with('error', 'Failed to update data');
-        }
+        return redirect()->route('matakuliah.index')->with('success', 'Data Admin berhasil diubah');
     }
+
 
     /**
      * Remove the specified resource from storage.

@@ -5,29 +5,18 @@
     <h1 class="h2">Edit Data</h1>
 </div>
 <div class="col-lg-8">
-    <form method="POST" action="{{route('matakuliah.update', $matakuliah->kode) }}">
-        @method('put')
+    <form method="POST" action="{{route('matakuliah.update', $data->kode) }}">
+
         @csrf
-        <div class="mb-3">
-            <label for="kode" class="form-label">Kode</label>
-            <input type="text" name="kode" class="form-control" id="kode" value="{{ $matakuliah->kode }}">
-        </div>
+
         <div class="mb-3">
             <label for="nama" class="form-label">Nama</label>
-            <input type="text" name="nama" class="form-control" id="nama" value="{{ $matakuliah->nama }}">
+            <input type="text" name="nama" class="form-control" id="nama" placeholder="{{ $data->nama }}">
         </div>
         <div class="mb-3">
             <label for="jumlah_sks" class="form-label">Jumlah SKS</label>
             <input type="text" name="jumlah_sks" class="form-control" id="jumlah_sks"
-                value="{{ $matakuliah->jumlah_sks }}">
-        </div>
-        <div class="mb-3">
-            <label for="dosen" class="form-label">Dosen</label>
-            <select class="js-example-basic-multiple form-control" name="dosen_id[]" multiple="multiple" id="dosen">
-                @foreach ($dosen as $item)
-                <option value="{{ $item->NIP }}">{{ $item->NIP }}</option>
-                @endforeach
-            </select>
+                placeholder="{{ $data->jumlah_sks }}">
         </div>
         <button type="submit" class="btn btn-primary">Update Data</button>
     </form>

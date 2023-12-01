@@ -88,7 +88,7 @@ class MahasiswaController extends Controller
         $data = DB::select('
         SELECT nim, nama, jk,tempat_lahir,tgl_lahir
         FROM mahasiswa
-        WHERE kode = ?
+        WHERE nim = ?
     ', [$id]);
 
         if (!empty($data)) {
@@ -125,13 +125,15 @@ class MahasiswaController extends Controller
         try {
 
             DB::update(
-                'UPDATE mahasiswa SET nim = :nim, nama = :nama, jk = :jk , tempat_lahir = :tempat_lahir, tgl_lahir = :tgl_lahir WHERE nim = :nim',
+                'UPDATE mahasiswa SET nim = :nim, nama = :nama, jk = :jk , tempat_lahir = :tempat_lahir, tgl_lahir = :tgl_lahir WHERE nim = :id',
                 [
-                    'nim' => $request->kode,
+                    'nim' => $request->nim,
                     'nama' => $request->nama,
                     'jk' => $request->jk,
                     'tempat_lahir' => $request->tempat_lahir,
                     'tgl_lahir' => $request->tgl_lahir,
+                    'id' => $nim,
+
                 ]
             );
 

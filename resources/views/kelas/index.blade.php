@@ -16,7 +16,6 @@
         <thead>
             <tr>
                 <th scope="col">Kode Kelas</th>
-                <th scope="col">NIM</th>
                 <th scope="col">Kode Mata Kuliah</th>
                 <th class="text-center" scope="col">Action</th>
             </tr>
@@ -25,7 +24,6 @@
             @foreach ($kelas as $item)
             <tr>
                 <td>{{ $item->kode_kelas }}</td>
-                <td>{{ $item->nim }}</td>
                 <td>{{ $item->kode_mk }}</td>
                 <td class="text-center">
                     <a href="/kelas/{{ $item->id }}/edit" class="btn btn-warning rounded-4"><span
