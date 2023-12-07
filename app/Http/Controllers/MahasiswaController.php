@@ -6,16 +6,14 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Mahasiswa;
 use Illuminate\Http\Request;
 
-class MahasiswaController extends Controller
-{
+class MahasiswaController extends Controller {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
 
-    public function index()
-    {
+    public function index() {
         $mahasiswa = DB::select("
         SELECT * from mahasiswa WHERE is_deleted = 0
     ");
@@ -28,8 +26,7 @@ class MahasiswaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
+    public function create() {
         $mahasiswa = DB::select('SELECT * FROM mahasiswa');
         return view('mahasiswa.create')->with('mahasiswa', $mahasiswa);
     }
@@ -41,8 +38,7 @@ class MahasiswaController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function store(Request $request)
-    {
+    public function store(Request $request) {
         $request->validate([
             'nim' => 'required',
             'nama' => 'required',
@@ -71,8 +67,7 @@ class MahasiswaController extends Controller
      * @param  \App\Models\Mahasiswa  $mahasiswa
      * @return \Illuminate\Http\Response
      */
-    public function show(Mahasiswa $mahasiswa)
-    {
+    public function show(Mahasiswa $mahasiswa) {
         //
     }
 
@@ -83,15 +78,14 @@ class MahasiswaController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function edit($id)
-    {
+    public function edit($id) {
         $data = DB::select('
         SELECT nim, nama, jk,tempat_lahir,tgl_lahir
         FROM mahasiswa
         WHERE nim = ?
     ', [$id]);
 
-        if (!empty($data)) {
+        if(!empty($data)) {
             $data = $data[0]; // Retrieve only the first row from the query result
         } else {
             return redirect()->route('mahasiswa.index')->with('error', 'Data not found');
@@ -109,8 +103,7 @@ class MahasiswaController extends Controller
      */
 
 
-    public function update($nim, Request $request)
-    {
+    public function update($nim, Request $request) {
         $request->validate([
             'nim' => 'required',
             'nama' => 'required',
@@ -153,31 +146,27 @@ class MahasiswaController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function destroy($nim)
-    {
+    public function destroy($nim) {
         $sql = "UPDATE mahasiswa SET is_deleted = 1 WHERE nim = ?";
         DB::update($sql, [$nim]);
         return redirect()->route('mahasiswa.index')->with('success', 'Data has been deleted');
     }
 
-    public function restore($nim)
-    {
+    public function restore($nim) {
         $sql = "UPDATE mahasiswa SET is_deleted = 0 WHERE nim = ?";
         DB::update($sql, [$nim]);
-        return redirect()->route('mahasiswa.trash')->with('success', 'Data has been restored');
-        // return redirect('/trash')->with('success', 'Data has been restored');
+        // return redirect()->route('mahasiswa.trash')->with('success', 'Data has been restored');
+        return redirect('/trash')->with('success', 'Data has been restored');
     }
 
-    public function showTrash()
-    {
+    public function showTrash() {
         $trashedMatakuliah = DB::select('SELECT * FROM matakuliah WHERE is_deleted = 1');
         $trashedMahasiswa = DB::select('SELECT * FROM mahasiswa WHERE is_deleted = 1');
 
         return view('/trash')->with('trashedMatakuliah', $trashedMatakuliah)
             ->with('trashedMahasiswa', $trashedMahasiswa);
     }
-    public function hardDelete($nim)
-    {
+    public function hardDelete($nim) {
         DB::delete("DELETE FROM mahasiswa WHERE nim = :nim AND is_deleted = 1", ['nim' => $nim]);
         return redirect()->route('matakuliah.trash')->with('success', 'Data berhasil dihapus');
     }
