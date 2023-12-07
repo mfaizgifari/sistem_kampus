@@ -2,19 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Matakuliah;
 use App\Models\Kelas;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class KelasController extends Controller
-{
+class KelasController extends Controller {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
+    public function index() {
         $kelas = DB::select('SELECT * FROM kelas');
 
         return view('kelas.index', [
@@ -28,34 +27,48 @@ class KelasController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-        return view('kelas.create', [
-            'title' => 'Kelas'
-        ]);
-    }
+    public function create() {
+        $matakuliah = Matakuliah::all(); // Fetch all data from the Matakuliah table
 
+        return view('kelas.create', compact('matakuliah'));
+    }
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        $data = $request->all();
-        DB::insert('INSERT INTO kelas (id,nim,kode_mk, kode_kelas) VALUES (?,NULL,?, ?)', [$data['kode_mk'], $data['kode_kelas']]);
+    // public function store(Request $request) {
+    //     $data = $request->all();
+    //     DB::insert('INSERT INTO kelas (id,nim,kode_mk, kode_kelas) VALUES (?,NULL,?, ?)', [$data['kode_mk'], $data['kode_kelas']]);
+    //     return redirect('/kelas')->with('success', 'Data has been created');
+    // }
+
+    public function store(Request $request) {
+        $data = $request->validate([
+            'kode_mk' => 'required',
+            'kode_kelas' => 'required',
+        ]);
+
+        // Assuming you have an 'id' field set as auto-increment in your table
+        $kodeMk = $data['kode_mk'];
+        $kodeKelas = $data['kode_kelas'];
+
+        DB::table('kelas')->insert([
+            'nim' => NULL,
+            'kode_mk' => $kodeMk,
+            'kode_kelas' => $kodeKelas
+        ]);
+
         return redirect('/kelas')->with('success', 'Data has been created');
     }
-
     /**
      * Display the specified resource.
      *
      * @param  \App\Models\Kelas  $kelas
      * @return \Illuminate\Http\Response
      */
-    public function show(Kelas $kelas)
-    {
+    public function show(Kelas $kelas) {
         //
     }
 
@@ -65,11 +78,10 @@ class KelasController extends Controller
      * @param  \App\Models\Kelas  $kelas
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
+    public function edit($id) {
         $kelas = DB::select('SELECT * FROM kelas WHERE id = ?', [$id]);
 
-        if (!empty($kelas)) {
+        if(!empty($kelas)) {
             $kelas = $kelas[0]; // Fetch the first result
         } else {
             return redirect()->route('kelas.index')->with('error', 'Data not found');
@@ -88,8 +100,7 @@ class KelasController extends Controller
      * @param  \App\Models\Kelas  $kelas
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
+    public function update(Request $request, $id) {
         $data = $request->except(['_token', '_method']);
         DB::update('UPDATE kelas SET kode_mk = ?, kode_kelas = ? WHERE id = ?', [$data['kode_mk'], $data['kode_kelas'], $id]);
         return redirect('/kelas')->with('success', 'Data has been updated');
@@ -101,8 +112,7 @@ class KelasController extends Controller
      * @param  \App\Models\Kelas  $kelas
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
+    public function destroy($id) {
         DB::delete('DELETE FROM kelas WHERE id = ?', [$id]);
         return redirect('/kelas')->with('success', 'Data has been deleted');
     }

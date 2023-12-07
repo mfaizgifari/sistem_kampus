@@ -30,6 +30,9 @@ Route::get('/', function () {
 Route::resource('/dosen', DosenController::class)->middleware('admin');
 Route::resource('/matakuliah', MatakuliahController::class)->middleware('admin');
 Route::post('/matakuliah/{kode}/edit', [MatakuliahController::class, 'update'])->middleware('admin')->name('matakuliah.update');
+Route::post('/dosen/{nip}/edit', [DosenController::class, 'update'])->middleware('admin')->name('dosen.update');
+// Route::get('/dosen/{nip}/edit', 'DosenController@edit')->name('dosen.edit');
+// Route::post('/dosen/{nip}', 'DosenController@update')->name('dosen.update');
 Route::get('/trash', [MatakuliahController::class, 'showTrash'])->name('matakuliah.trash');
 // Route::get('/trashmahasiswa', [MahasiswaController::class, 'showTrash'])->name('mahasiswa.trash');
 Route::resource('/mahasiswa', MahasiswaController::class)->middleware('admin');

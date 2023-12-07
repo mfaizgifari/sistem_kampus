@@ -8,12 +8,7 @@
                 </a>
             </li>
 
-            <li class="nav-item">
-                <a class="nav-link {{ Request::is('/pendaftaran') ? 'active' : '' }} " href="/pendaftaran">
-                    <span data-feather="edit-3"></span>
-                    Pendaftaran
-                </a>
-            </li>
+
             @cannot('admin')
             <li class="nav-item">
                 <a class="nav-link {{ Request::is('/irs') ? 'active' : '' }} " href="/irs">

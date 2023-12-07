@@ -22,7 +22,7 @@
                 <td>{{ $matakuliah->kode }}</td>
                 <td>{{ $matakuliah->nama }}</td>
                 <td class="text-center">{{ $matakuliah->jumlah_sks }}</td>
-                <td>
+                <td class="text-center">
                     <form method="post" action="{{ url('/matakuliah/restore', $matakuliah->kode) }}">
                         @csrf
                         <button type="submit" class="btn btn-warning rounded-4">Restore</button>
@@ -65,7 +65,7 @@
                     <td>{{ $mahasiswa->jk}}</td>
                     <td>{{ $mahasiswa->tempat_lahir }}</td>
                     <td>{{ $mahasiswa->tgl_lahir }}</td>
-                    <td>
+                    <td class="text-center">
                         <form method="post" action="{{ url('/mahasiswa/restore', $mahasiswa->nim) }}">
                             @csrf
                             <button type="submit" class="btn btn-warning rounded-4">Restore</button>
